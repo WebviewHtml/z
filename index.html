@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الأكواد</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            transition: transform 0.3s;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #showCodeBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #clearCodeBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #showCodeBtn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        #clearCodeBtn:hover {
+            background-color: #e53935;
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px; /* Increased width */
+            height: 800px; /* Increased height */
+            background-color: #fefefe;
+            border: 20px solid #888;
+            border-radius: 50px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .modal.show {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 32px; /* Increased font size */
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="codeInput" placeholder="أدخل الكود هنا..."></textarea>
+        <div>
+            <button id="showCodeBtn">عرض الكود</button>
+            <button id="clearCodeBtn">حذف الكود</button>
+        </div>
+        <div id="codeModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="codeFrame"></iframe>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        document.getElementById('showCodeBtn').addEventListener('click', function() {
+            var code = document.getElementById('codeInput').value;
+            var iframe = document.getElementById('codeFrame');
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+
+            // Write the code to the iframe
+            doc.open();
+            doc.write(code);
+            doc.close();
+
+            // Show the modal with animation
+            var modal = document.getElementById('codeModal');
+            modal.classList.add('show');
+        });
+
+        document.getElementById('clearCodeBtn').addEventListener('click', function() {
+            document.getElementById('codeInput').value = '';
+        });
+
+        document.querySelector('.close').addEventListener('click', function() {
+            var modal = document.getElementById('codeModal');
+            modal.classList.remove('show');
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('codeModal')) {
+                var modal = document.getElementById('codeModal');
+                modal.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
